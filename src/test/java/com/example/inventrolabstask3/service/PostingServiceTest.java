@@ -43,8 +43,8 @@ class PostingServiceTest {
 
     @Test
     void testAddAuthorizedDeliveryColumn() throws Exception {
-        List<PostingDto> postingsFromCsv = postingService.getPostingsFromCsv();
-        List<LoginDto> loginsFromCsv = loginService.getLoginsFromCsv();
+        List<PostingDto> postingsFromCsv = postingService.getPostingsDtoFromCsv();
+        List<LoginDto> loginsFromCsv = loginService.getLoginsDtoFromCsv();
         postingService.addAuthorizedDeliveryColumn(postingsFromCsv, loginsFromCsv);
     }
 }

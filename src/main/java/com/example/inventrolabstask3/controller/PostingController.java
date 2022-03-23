@@ -3,7 +3,7 @@ package com.example.inventrolabstask3.controller;
 import com.example.inventrolabstask3.persistence.entity.Posting;
 import com.example.inventrolabstask3.service.Period;
 import com.example.inventrolabstask3.service.PostingService;
-import com.example.inventrolabstask3.service.utils.ListConverter;
+import com.example.inventrolabstask3.service.dto.PostingDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,11 +19,15 @@ import java.util.List;
 public class PostingController {
 
     private final PostingService postingService;
-    private final ListConverter listConverter;
 
     @GetMapping("/csv")
-    public List<Posting> getPostingsFromCsv() {
-        return listConverter.convertList(postingService.getPostingsFromCsv(), x -> x.toPosting(x));
+    public List<PostingDto> getPostingsFromCsv() {
+        return postingService.getPostingsDtoFromCsv();
+    }
+
+    @GetMapping("/csv/mat-doc")
+    public List<Long> getMatDoc() {
+        return postingService.getMatDoc();
     }
 
     /**

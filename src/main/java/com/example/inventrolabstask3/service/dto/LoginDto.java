@@ -23,5 +23,4 @@ public class LoginDto {
     public Login toLogin(LoginDto loginDto) {
         return new Login(loginDto);
     }
-
 }

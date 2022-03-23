@@ -23,7 +23,7 @@ public class LoginService {
     /**
      * Step 1 (Прочитать файл logins.csv с локальной файловой системы)
      */
-    public List<LoginDto> getLoginsFromCsv() {
+    public List<LoginDto> getLoginsDtoFromCsv() {
         return listDtosCreator.createLoginDtos(LOGINS_CSV);
     }
 
@@ -31,7 +31,7 @@ public class LoginService {
      * Step 4 (Cохранить в SQL СУБД данные файла logins.csv)
      */
     public void addLoginsToDb() {
-        List<LoginDto> loginsFromCsv = getLoginsFromCsv();
+        List<LoginDto> loginsFromCsv = getLoginsDtoFromCsv();
         loginRepository.saveAll(listConverter.convertList(loginsFromCsv, x -> x.toLogin(x)));
     }
 

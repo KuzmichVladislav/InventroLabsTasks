@@ -40,6 +40,4 @@ public class ListDtosCreator {
             return Collections.emptyList();
         }
     }
-
-
 }

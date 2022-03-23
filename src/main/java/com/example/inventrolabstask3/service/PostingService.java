@@ -33,17 +33,19 @@ public class PostingService {
      * Step 2 (Прочитать файл postings.csv с локальной файловой системы (строки со значениями в поле Mat. Doc.)
      */
     public List<Long> getMatDoc() {
-        List<PostingDto> postingsFromCsv = getPostingsFromCsv();
+        List<PostingDto> postingsFromCsv = getPostingsDtoFromCsv();
         List<Posting> postings = listConverter.convertList(postingsFromCsv, x -> x.toPosting(x));
         return postings.stream().map(Posting::getMatDoc).collect(Collectors.toList());
     }
 
     /**
-     * Step 3 (Добавить булевое поле "авторизованная поставка" в данные из postings.csv, которое будет указывать, что User Name (postings.csv) находится в списке AppAccountName (logins.csv) и IsActive)
+     * Step 3 (Добавить булевое поле "авторизованная поставка" в данные из postings.csv, которое будет указывать,
+     * что User Name (postings.csv) находится в списке AppAccountName (logins.csv) и IsActive)
      */
     public void addAuthorizedDeliveryColumn(List<PostingDto> postingDtos, List<LoginDto> loginDtos) throws Exception {
         List<Login> logins = listConverter.convertList(loginDtos, x -> x.toLogin(x));
-        postingDtos.forEach(postingDto -> postingDto.setAuthorizedDelivery(logins.stream().anyMatch(x -> x.getAppAccountName().equals(postingDto.getUserName()) && x.isActive())));
+        postingDtos.forEach(postingDto -> postingDto.setAuthorizedDelivery(logins.stream()
+                .anyMatch(x -> x.getAppAccountName().equals(postingDto.getUserName()) && x.isActive())));
         Writer writer = new FileWriter(POSTINGS_CSV);
         StatefulBeanToCsv sbc = new StatefulBeanToCsvBuilder(writer).withSeparator(';').build();
         sbc.write(postingDtos);
@@ -54,7 +56,7 @@ public class PostingService {
      * Step 5 (Сохранить в SQL СУБД данные файла postings.csv (с дополнительным полем))
      */
     public void addPostingsToDb() {
-        List<PostingDto> postingsFromCsv = getPostingsFromCsv();
+        List<PostingDto> postingsFromCsv = getPostingsDtoFromCsv();
         postingRepository.saveAll(listConverter.convertList(postingsFromCsv, x -> x.toPosting(x)));
     }
 
@@ -73,7 +75,7 @@ public class PostingService {
         }
     }
 
-    public List<PostingDto> getPostingsFromCsv() {
+    public List<PostingDto> getPostingsDtoFromCsv() {
         return listDtosCreator.createPostingDtos(POSTINGS_CSV);
     }
 }
